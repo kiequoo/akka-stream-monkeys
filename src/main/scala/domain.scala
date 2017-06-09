@@ -18,8 +18,8 @@ object Species {
 }
 
 sealed trait Gender
-case object Male extends Gender
-case object Female extends Gender
+case object Male extends Gender { override def toString = "male" }
+case object Female extends Gender { override def toString = "female" }
 
 trait Monkey {
   def name: String
@@ -39,6 +39,9 @@ object Monkey {
     dob: LocalDate,
     dod: Option[LocalDate] = None
   ): Monkey = MonkeyImpl(name, species, gender, dob, dod)
+
+  def unapply(m: Monkey): Option[(String, Species, Gender, LocalDate, Option[LocalDate])] =
+    Some((m.name, m.species, m.gender, m.dob, m.dod))
 }
 
 private case class MonkeyImpl(

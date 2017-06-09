@@ -19,7 +19,7 @@ class MonkeyEventStreamSpec(implicit ee: ExecutionEnv)
       implicit val materializer = ActorMaterializer()
 
       val pipeline =
-        MonkeyRunnableGraph(source, monkeyRepo, parallelism = 8)
+        MonkeyRunnableGraph(source, monkeyRepo, omdi, parallelism = 8)
 
       val t0 = System.currentTimeMillis()
 
@@ -54,6 +54,12 @@ class MonkeyEventStreamSpec(implicit ee: ExecutionEnv)
 
   trait TestScope extends Scope {
     val monkeyRepo = new MonkeyRepo
+
+    val omdi = new OMDI {
+      def reportDeath(species: Species, gender: Gender, age: Long) = {
+        println(s"A $gender $species died, aged $age")
+      }
+    }
 
     val source = Source(
       List(

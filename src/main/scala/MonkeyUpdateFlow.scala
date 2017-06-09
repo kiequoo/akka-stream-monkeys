@@ -20,7 +20,7 @@ object EventApplier {
 }
 
 object MonkeyUpdateFlow {
-  def apply(repo: MonkeyRepo, parallelism: Int = 1): Flow[Event, (Event, Option[Monkey]), NotUsed] = {
+  def apply(repo: MonkeyRepo, parallelism: Int = 1): Flow[Event, (Event, Monkey), NotUsed] = {
     val hash = ConsistentHash(0 until parallelism, 1)
     Flow[Event]
       .groupBy(parallelism, ev => hash.nodeFor(ev.name))
@@ -29,7 +29,7 @@ object MonkeyUpdateFlow {
           monkey <- repo.getMonkey(ev.name)
           updatedMonkey <- Future.successful(EventApplier(monkey, ev))
           _ <- repo.setMonkey(updatedMonkey)
-        } yield (ev, monkey)
+        } yield (ev, updatedMonkey)
       }
       .mergeSubstreams
   }
