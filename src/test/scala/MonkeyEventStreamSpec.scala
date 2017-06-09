@@ -27,8 +27,9 @@ class MonkeyEventStreamSpec(implicit ee: ExecutionEnv)
 
       (for {
         _ <- pipeline.run()
+        res <- monkeyRepo.monkeys
       } yield {
-        monkeyRepo.monkeys mustEqual Map(
+        res mustEqual Map(
           Gorilla -> 1,
           Chimp -> 4,
           Baboon -> 2
