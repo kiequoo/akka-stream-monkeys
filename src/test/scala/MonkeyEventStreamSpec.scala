@@ -25,10 +25,15 @@ class MonkeyEventStreamSpec(implicit ee: ExecutionEnv)
           Sink.ignore
         )(Keep.right)
 
+      val t0 = System.nanoTime()
+
       (for {
         _ <- pipeline.run()
         res <- monkeyRepo.monkeys
       } yield {
+        val t1 = System.nanoTime()
+        println("Elapsed time: " + ((t1 - t0) / 1000 / 1000) + "ms")
+
         res mustEqual Map(
           Gorilla -> 1,
           Chimp -> 4,
