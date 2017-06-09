@@ -5,7 +5,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object MonkeyCountFlow {
-  def apply(repo: MonkeyRepo): Flow[SpeciesEvent, Unit, NotUsed] =
+  def apply(repo: MonkeyRepo): Flow[SpeciesEvent, (Species, Int), NotUsed] =
     Flow[SpeciesEvent].mapAsync(1) { ev =>
       for {
         count <- repo.getMonkeyCount(ev.species)
@@ -16,6 +16,6 @@ object MonkeyCountFlow {
           }
         }
         _ <- repo.setMonkeyCount(ev.species, updatedCount)
-      } yield ()
+      } yield (ev.species, updatedCount)
     }
 }
