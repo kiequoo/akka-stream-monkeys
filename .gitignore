@@ -1,0 +1,29 @@
+### Developer's zone ###
+dev/
+
+### SBT ###
+.sbt
+target/
+lib_managed/
+src_managed/
+project/boot/
+.history
+.cache
+
+### Intellij ###
+out/
+.idea/
+/*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+### Mac OS ###
+.DS_Store
+
+### Python ###
+*.pyc
+
+### Ensime ###
+.ensime
+.ensime_cache/
